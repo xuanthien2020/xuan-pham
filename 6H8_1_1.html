@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển đổi số: Điểm và Đường thẳng - Toán 6</title>
+    
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], processEscapes: true },
+            options: { enableMenu: false }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary: #00796b; --secondary: #455a64; --accent: #ff5722; --bg: #f0f4f8;
+            --point-color: #d32f2f; --line-color: #1976d2;
+            --correct: #2e7d32; --wrong: #c62828;
+        }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; line-height: 1.6; color: #333; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        
+        .header { text-align: center; background: linear-gradient(135deg, var(--primary), #004d40); color: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; }
+
+        /* KIẾN THỨC CHI TIẾT */
+        .section-title { color: var(--primary); border-bottom: 3px solid var(--primary); display: inline-block; margin-top: 30px; padding-bottom: 5px; }
+        .lesson-card { background: #fffde7; padding: 25px; border-radius: 15px; border-left: 10px solid #fbc02d; margin-bottom: 20px; }
+        .info-box { background: white; padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; margin: 15px 0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); }
+        
+        /* HÌNH ẢNH TĨNH */
+        .static-img { text-align: center; margin: 20px 0; padding: 15px; background: #fafafa; border-radius: 10px; border: 1px solid #eee; }
+        .img-label { font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; }
+
+        /* MÔ PHỎNG */
+        .sim-container { text-align: center; background: #263238; color: white; padding: 30px; border-radius: 20px; margin: 40px 0; }
+        canvas { background: #fff; border-radius: 10px; max-width: 100%; border: 2px solid #546e7a; cursor: crosshair; }
+        .slider-ui { width: 80%; margin: 25px auto; }
+
+        /* QUIZ */
+        #quiz-auth { text-align: center; padding: 40px; background: #e8f5e9; border-radius: 15px; border: 2px solid var(--primary); }
+        .input-name { padding: 12px; width: 280px; border-radius: 8px; border: 2px solid var(--primary); font-size: 1rem; }
+        #quiz-content { display: none; }
+        .q-card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; }
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 15px; }
+        .option-btn { padding: 12px; border: 2px solid #dee2e6; border-radius: 10px; cursor: pointer; text-align: center; transition: 0.3s; }
+        .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .drop-zone { display: inline-block; width: 140px; height: 35px; border: 2px dashed #999; vertical-align: middle; border-radius: 8px; background: #f9f9f9; text-align: center; }
+        .draggable { display: inline-block; padding: 5px 12px; background: var(--secondary); color: white; border-radius: 5px; cursor: grab; margin: 5px; }
+        
+        .ans-feedback { display: none; margin-top: 10px; font-weight: bold; }
+        .btn { padding: 15px 40px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: 0.3s; }
+        .btn-main { background: var(--primary); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>📍 BÀI 1: ĐIỂM. ĐƯỜNG THẲNG</h1>
+        <p>Kiến thức trọng tâm - Hình học trực quan 6</p>
+    </div>
+
+    <h2 class="section-title">1. Điểm</h2>
+    <div class="lesson-card">
+        <div class="info-box">
+            <ul>
+                <li><b>Khái niệm:</b> Dấu chấm nhỏ trên mặt giấy là hình ảnh của điểm. Điểm là hình cơ bản nhất, không có kích thước (chiều dài, chiều rộng).</li>
+                <li><b>Cách đặt tên:</b> Người ta dùng các chữ cái <b>IN HOA</b> như $A, B, C, M...$ để đặt tên cho điểm.</li>
+                <li><b>Lưu ý:</b> Khi nói hai điểm mà không nói gì thêm, ta hiểu đó là hai điểm phân biệt.</li>
+            </ul>
+        </div>
+        <div class="static-img">
+            <svg width="300" height="100">
+                <circle cx="60" cy="50" r="4" fill="var(--point-color)" />
+                <text x="55" y="40" font-weight="bold">A</text>
+                <circle cx="150" cy="50" r="4" fill="var(--point-color)" />
+                <text x="145" y="40" font-weight="bold">B</text>
+                <circle cx="240" cy="50" r="4" fill="var(--point-color)" />
+                <text x="235" y="40" font-weight="bold">C</text>
+            </svg>
+            <div class="img-label">Hình 1: Ba điểm A, B, C phân biệt</div>
+        </div>
+    </div>
+
+    <h2 class="section-title">2. Đường thẳng</h2>
+    <div class="lesson-card">
+        <div class="info-box">
+            <ul>
+                <li><b>Hình ảnh thực tế:</b> Sợi chỉ căng thẳng, mép thước kẻ, vạch kẻ đường thẳng tắp...</li>
+                <li><b>Đặc điểm:</b> Đường thẳng <b>không bị giới hạn</b> về cả hai phía.</li>
+                <li><b>Cách đặt tên:</b> 
+                    <br>- Cách 1: Dùng một chữ cái <b>in thường</b> ($a, b, m, n...$).
+                    <br>- Cách 2: Dùng hai chữ cái <b>in thường</b> ($xy, uv...$).
+                    <br>- Cách 3: Dùng tên của hai điểm mà nó đi qua ($AB, MN...$).
+                </li>
+            </ul>
+        </div>
+        <div class="static-img">
+            <svg width="500" height="120">
+                <line x1="50" y1="30" x2="200" y2="30" stroke="var(--line-color)" stroke-width="2" />
+                <text x="210" y="35" font-style="italic">a</text>
+                <line x1="50" y1="80" x2="200" y2="80" stroke="var(--line-color)" stroke-width="2" />
+                <text x="40" y="95">x</text> <text x="205" y="95">y</text>
+                <line x1="300" y1="55" x2="450" y2="55" stroke="var(--line-color)" stroke-width="2" />
+                <circle cx="340" cy="55" r="3" fill="black" /> <text x="335" y="45">A</text>
+                <circle cx="410" cy="55" r="3" fill="black" /> <text x="405" y="45">B</text>
+            </svg>
+            <div class="img-label">Hình 2: Các cách đặt tên đường thẳng (a, xy, AB)</div>
+        </div>
+    </div>
+
+    <h2 class="section-title">3. Điểm thuộc và không thuộc đường thẳng</h2>
+    <div class="lesson-card">
+        <div class="info-box">
+            <p>Cho điểm $M$ và đường thẳng $d$:</p>
+            <ul>
+                <li>Nếu điểm $M$ <b>nằm trên</b> đường thẳng $d$, ta nói "$M$ thuộc $d$". Kí hiệu: $M \in d$.</li>
+                <li>Nếu điểm $M$ <b>không nằm trên</b> đường thẳng $d$, ta nói "$M$ không thuộc $d$". Kí hiệu: $M \notin d$.</li>
+            </ul>
+        </div>
+        <div class="static-img">
+             
+            <div class="img-label">Hình 3: Quan hệ giữa điểm và đường thẳng ($M \in d, N \notin d$)</div>
+        </div>
+    </div>
+
+    <div class="sim-container">
+        <h2>🎮 MÁY THỰC NGHIỆM ĐIỂM & ĐƯỜNG THẲNG</h2>
+        <p>Kéo thanh trượt để xem vị trí điểm thay đổi và ký hiệu tương ứng</p>
+        <canvas id="geoCanvas" width="600" height="250"></canvas>
+        <div class="slider-ui">
+            <input type="range" id="geoSlider" min="40" max="210" value="125" style="width: 100%;">
+            <div id="geoReadout" style="color: #ffeb3b; font-size: 1.5rem; margin-top: 15px; font-weight: bold;">Đang tải...</div>
+        </div>
+    </div>
+
+    <div id="quiz-auth">
+        <h2>📝 BÀI TẬP TỰ ĐÁNH GIÁ</h2>
+        <p>Hệ thống bài tập trắc nghiệm và kéo thả (không cần gõ dấu)</p>
+        <input type="text" id="userName" class="input-name" placeholder="Họ và tên học sinh..."><br><br>
+        <button class="btn btn-main" onclick="startQuiz()">LÀM BÀI NGAY</button>
+    </div>
+
+    <div id="quiz-content">
+        <div style="display:flex; justify-content: space-between; padding: 15px; background: var(--secondary); color:white; border-radius: 10px; margin-bottom: 20px;">
+            <span>Học sinh: <b id="stName"></b></span>
+            <span>⏱ Thời gian: <b id="timeClock">15:00</b></span>
+        </div>
+        <div id="quiz-list"></div>
+        <button class="btn btn-main" id="subBtn" onclick="finishQuiz()" style="display:block; margin: 40px auto; background: var(--accent);">NỘP BÀI</button>
+        <div id="final-result" style="text-align:center; font-size: 2rem; font-weight: bold; margin-bottom: 50px;"></div>
+    </div>
+</div>
+
+<script>
+    // --- CANVAS ENGINE ---
+    const canvas = document.getElementById('geoCanvas');
+    const ctx = canvas.getContext('2d');
+    const slider = document.getElementById('geoSlider');
+    const readout = document.getElementById('geoReadout');
+
+    function draw(posY) {
+        ctx.clearRect(0,0,600,250);
+        // Vẽ đường d
+        ctx.beginPath(); ctx.moveTo(50, 125); ctx.lineTo(550, 125);
+        ctx.strokeStyle = "#1976d2"; ctx.lineWidth = 4; ctx.stroke();
+        ctx.fillStyle = "#1976d2"; ctx.font = "bold 20px Arial"; ctx.fillText("d", 560, 132);
+
+        // Vẽ điểm M
+        ctx.beginPath(); ctx.arc(300, posY, 8, 0, Math.PI*2);
+        ctx.fillStyle = "#d32f2f"; ctx.fill();
+        ctx.fillText("M", 310, posY - 15);
+
+        // Logic Check
+        if(Math.abs(posY - 125) < 6) {
+            readout.innerText = "Điểm M THUỘC đường thẳng d: M ∈ d";
+            readout.style.color = "#4caf50";
+        } else {
+            readout.innerText = "Điểm M KHÔNG THUỘC đường thẳng d: M ∉ d";
+            readout.style.color = "#ffeb3b";
+        }
+    }
+    slider.oninput = () => draw(slider.value);
+    draw(125);
+
+    // --- QUIZ SYSTEM ---
+    const quizData = [
+        { id: 1, type: 'mcq', text: 'Để đặt tên cho một điểm, người ta dùng:', opts: ['Chữ cái in hoa', 'Chữ cái in thường', 'Chữ số'], corr: 0 },
+        { id: 2, type: 'mcq', text: 'Hình ảnh mép thước kẻ cho ta hình ảnh của:', opts: ['Điểm', 'Đường thẳng', 'Góc'], corr: 1 },
+        { id: 3, type: 'drag', text: 'Điểm $A$ thuộc đường thẳng $b$ được ký hiệu là:', opts: ['$A \\in b$', '$A \\notin b$'], corr: '$A \\in b$' },
+        { id: 4, type: 'mcq', text: 'Có bao nhiêu đường thẳng đi qua hai điểm phân biệt cho trước?', opts: ['0', '1', 'Vô số'], corr: 1 },
+        { id: 5, type: 'mcq', text: 'Đường thẳng $xy$ có bị giới hạn độ dài không?', opts: ['Có bị giới hạn', 'Không bị giới hạn'], corr: 1 },
+        { id: 6, type: 'drag', text: 'Chọn ký hiệu đúng: Điểm $B$ nằm ngoài đường thẳng $m$.', opts: ['$B \\in m$', '$B \\notin m$'], corr: '$B \\notin m$' },
+        { id: 7, type: 'mcq', text: 'Điểm $C$ nằm trên đường thẳng $a$. Phát biểu nào SAU ĐÂY LÀ ĐÚNG?', opts: ['$C$ thuộc $a$', '$C$ không thuộc $a$', '$a$ không chứa $C$'], corr: 0 }
+    ];
+
+    let userAnswers = {};
+    let timer;
+
+    function startQuiz() {
+        const name = document.getElementById('userName').value;
+        if(!name) return alert("Em nhập tên trước nhé!");
+        document.getElementById('quiz-auth').style.display = 'none';
+        document.getElementById('quiz-content').style.display = 'block';
+        document.getElementById('stName').innerText = name;
+        renderQuiz();
+        
+        let t = 900;
+        timer = setInterval(() => {
+            t--; let m = Math.floor(t/60), s = t%60;
+            document.getElementById('timeClock').innerText = `${m}:${s<10?'0'+s:s}`;
+            if(t<=0) finishQuiz();
+        }, 1000);
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-list');
+        container.innerHTML = "";
+        quizData.forEach((q, i) => {
+            let div = document.createElement('div');
+            div.className = 'q-card';
+            div.id = `card_${q.id}`;
+            let html = `<b>Câu ${i+1}:</b> ${q.text}<br>`;
+            
+            if(q.type === 'mcq') {
+                html += `<div class="options-grid">`;
+                q.opts.forEach((o, idx) => {
+                    html += `<div class="option-btn" onclick="selectMCQ(${q.id}, ${idx})" id="opt_${q.id}_${idx}">${o}</div>`;
+                });
+                html += `</div>`;
+            } else {
+                html += `<div style="margin-top:10px;"><div class="drop-zone" id="dz_${q.id}">Kéo vào đây</div> `;
+                q.opts.forEach(o => {
+                    let oid = o.replace(/[^a-zA-Z]/g,'');
+                    html += `<div class="draggable" draggable="true" id="dg_${q.id}_${oid}" data-v="${o}">${o}</div>`;
+                });
+                html += `</div>`;
+            }
+            html += `<div class="ans-feedback" id="fb_${q.id}"></div>`;
+            div.innerHTML = html;
+            container.appendChild(div);
+        });
+        if (window.MathJax) MathJax.typesetPromise();
+        initDrag();
+    }
+
+    function selectMCQ(qId, idx) {
+        userAnswers[qId] = idx;
+        document.querySelectorAll(`#card_${qId} .option-btn`).forEach(b => b.classList.remove('selected'));
+        document.getElementById(`opt_${qId}_${idx}`).classList.add('selected');
+    }
+
+    function initDrag() {
+        document.querySelectorAll('.draggable').forEach(d => d.ondragstart = e => e.dataTransfer.setData('text', e.target.id));
+        document.querySelectorAll('.drop-zone').forEach(z => {
+            z.ondragover = e => e.preventDefault();
+            z.ondrop = e => {
+                e.preventDefault();
+                const id = e.dataTransfer.getData('text');
+                if(id.includes(`dg_${z.id.split('_')[1]}`)) {
+                    z.innerHTML = ""; z.appendChild(document.getElementById(id));
+                }
+            }
+        });
+    }
+
+    function finishQuiz() {
+        clearInterval(timer);
+        let score = 0;
+        quizData.forEach(q => {
+            let isCorrect = false;
+            let feedback = document.getElementById(`fb_${q.id}`);
+            if(q.type === 'mcq') {
+                if(userAnswers[q.id] === q.corr) isCorrect = true;
+            } else {
+                const zone = document.getElementById(`dz_${q.id}`);
+                if(zone.children.length > 0 && zone.children[0].dataset.v === q.corr) isCorrect = true;
+            }
+            feedback.style.display = 'block';
+            if(isCorrect) {
+                score++; feedback.innerHTML = "<span style='color:green'>✓ Đúng!</span>";
+                document.getElementById(`card_${q.id}`).style.borderColor = "green";
+            } else {
+                feedback.innerHTML = `<span style='color:red'>✗ Sai. Đáp án: ${q.type==='mcq'?q.opts[q.corr]:q.corr}</span>`;
+                document.getElementById(`card_${q.id}`).style.borderColor = "red";
+            }
+        });
+        document.getElementById('final-result').innerText = `KẾT QUẢ: ${score} / ${quizData.length}`;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
